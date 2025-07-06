@@ -21,7 +21,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentification réussie
-            return redirect()->intended('/ninjas');
+            $user = Auth::user();
+            
+            // Rediriger selon le rôle
+            if ($user->isAdmin()) {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/ninjas');
+            }
         }
 
         // Échec de login
@@ -47,6 +54,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'role' => 'user', // Par défaut, les nouveaux utilisateurs sont des 'user'
         ]);
 
         Auth::login($user);

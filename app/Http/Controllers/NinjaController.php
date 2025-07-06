@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Ninja;
 use App\Models\Dojo;
+use App\Models\Like;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class NinjaController extends Controller
 {
@@ -23,20 +26,38 @@ class NinjaController extends Controller
   }
 
   public function create() {
-    // route --> /ninjas/create
+    // route --> /ninjas/create (Admin seulement)
+    if (!Auth::user()->isAdmin()) {
+        return redirect()->route('ninjas.index')->with('error', 'Seuls les administrateurs peuvent créer des ninjas.');
+    }
+    
     $dojos = Dojo::all();
 
     return view('ninjas.create', ["dojos" => $dojos]);
   }
 
   public function store(Request $request) {
-    // --> /ninjas/ (POST)
+    // --> /ninjas/ (POST) (Admin seulement)
+    if (!Auth::user()->isAdmin()) {
+        return redirect()->route('ninjas.index')->with('error', 'Seuls les administrateurs peuvent créer des ninjas.');
+    }
+    
     $validated = $request->validate([
       'name' => 'required|string|max:255',
       'skill' => 'required|integer|min:0|max:100',
       'bio' => 'required|string|min:20|max:1000',
       'dojo_id' => 'required|exists:dojos,id',
+      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+      'story' => 'nullable|string|min:20',
     ]);
+
+    // Gestion de l'upload d'image
+    if ($request->hasFile('image')) {
+      $imagePath = $request->file('image')->store('ninjas', 'public');
+      $validated['image'] = $imagePath;
+    }
+
+    $validated['story'] = $request->input('story');
 
     Ninja::create($validated);
 
@@ -44,12 +65,93 @@ class NinjaController extends Controller
   }
 
   public function destroy(Ninja $ninja) {
-    // --> /ninjas/{id} (DELETE)
+    // --> /ninjas/{id} (DELETE) (Admin seulement)
+    if (!Auth::user()->isAdmin()) {
+        return redirect()->route('ninjas.index')->with('error', 'Seuls les administrateurs peuvent supprimer des ninjas.');
+    }
+    
     $ninja->delete();
 
     return redirect()->route('ninjas.index')->with('success', 'Ninja Deleted!');
   }
 
-  // edit() and update() for edit view and update requests
-  // we won't be using these routes
+  public function edit(Ninja $ninja) {
+    // route --> /ninjas/{id}/edit (Admin seulement)
+    if (!Auth::user()->isAdmin()) {
+        return redirect()->route('ninjas.index')->with('error', 'Seuls les administrateurs peuvent modifier des ninjas.');
+    }
+    
+    $dojos = Dojo::all();
+    $ninja->load('dojo');
+
+    return view('ninjas.edit', ["ninja" => $ninja, "dojos" => $dojos]);
+  }
+
+  public function update(Request $request, Ninja $ninja) {
+    // --> /ninjas/{id} (PUT) (Admin seulement)
+    if (!Auth::user()->isAdmin()) {
+        return redirect()->route('ninjas.index')->with('error', 'Seuls les administrateurs peuvent modifier des ninjas.');
+    }
+    
+    $validated = $request->validate([
+      'name' => 'required|string|max:255',
+      'skill' => 'required|integer|min:0|max:100',
+      'bio' => 'required|string|min:20|max:1000',
+      'dojo_id' => 'required|exists:dojos,id',
+      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+      'story' => 'nullable|string|min:20',
+    ]);
+
+    // Gestion de l'upload d'image
+    if ($request->hasFile('image')) {
+      // Supprimer l'ancienne image si elle existe
+      if ($ninja->image && Storage::disk('public')->exists($ninja->image)) {
+        Storage::disk('public')->delete($ninja->image);
+      }
+      
+      $imagePath = $request->file('image')->store('ninjas', 'public');
+      $validated['image'] = $imagePath;
+    }
+
+    $validated['story'] = $request->input('story');
+
+    $ninja->update($validated);
+
+    return redirect()->route('ninjas.show', $ninja)->with('success', 'Ninja modifié avec succès !');
+  }
+
+  public function like(Ninja $ninja)
+  {
+    $user = Auth::user();
+    
+    // Vérifier si l'utilisateur a déjà liké ce ninja
+    if ($user->hasLiked($ninja)) {
+        return back()->with('error', 'Vous avez déjà liké ce ninja !');
+    }
+    
+    // Créer le like
+    Like::create([
+        'user_id' => $user->id,
+        'ninja_id' => $ninja->id,
+    ]);
+    
+    return back()->with('success', 'Ninja liké avec succès !');
+  }
+
+  public function unlike(Ninja $ninja)
+  {
+    $user = Auth::user();
+    
+    // Supprimer le like
+    $like = Like::where('user_id', $user->id)
+                ->where('ninja_id', $ninja->id)
+                ->first();
+    
+    if ($like) {
+        $like->delete();
+        return back()->with('success', 'Like retiré avec succès !');
+    }
+    
+    return back()->with('error', 'Vous n\'aviez pas liké ce ninja !');
+  }
 }

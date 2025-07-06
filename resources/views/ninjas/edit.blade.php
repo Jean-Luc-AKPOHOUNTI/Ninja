@@ -3,11 +3,12 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-2xl mx-auto">
-    <h2 class="text-3xl font-bold text-gray-100 mb-6">Créer un Nouveau Ninja</h2>
+    <h2 class="text-3xl font-bold text-gray-100 mb-6">Modifier le Ninja: {{ $ninja->name }}</h2>
 
     <div class="bg-gray-900 rounded-lg shadow-md p-6 border border-gray-700">
-      <form action="{{ route('ninjas.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+      <form action="{{ route('ninjas.update', $ninja) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
+        @method('PUT')
 
         <!-- ninja Name -->
         <div>
@@ -16,7 +17,7 @@
             type="text" 
             id="name" 
             name="name"
-            value="{{ old('name') }}"
+            value="{{ old('name', $ninja->name) }}"
             required
             class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
           >
@@ -29,7 +30,7 @@
             type="number" 
             id="skill" 
             name="skill"
-            value="{{ old('skill') }}"
+            value="{{ old('skill', $ninja->skill) }}"
             min="0"
             max="100"
             required
@@ -46,7 +47,7 @@
             name="bio" 
             required
             class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
-          >{{ old('bio') }}</textarea>
+          >{{ old('bio', $ninja->bio) }}</textarea>
         </div>
 
         <!-- select a dojo -->
@@ -54,9 +55,9 @@
           <label for="dojo_id" class="block text-sm font-medium text-gray-300 mb-2">Dojo:</label>
           <select id="dojo_id" name="dojo_id" required
                   class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent">
-            <option value="" disabled selected>Sélectionner un dojo</option>
+            <option value="" disabled>Sélectionner un dojo</option>
             @foreach($dojos as $dojo)
-              <option value="{{ $dojo->id }}" {{ $dojo->id == old('dojo_id') ? 'selected' : '' }} >
+              <option value="{{ $dojo->id }}" {{ $dojo->id == old('dojo_id', $ninja->dojo_id) ? 'selected' : '' }} >
                 {{ $dojo->name }} - {{ $dojo->location }}
               </option>
             @endforeach
@@ -66,8 +67,20 @@
         <!-- image upload -->
         <div>
           <label for="image" class="block text-sm font-medium text-gray-300 mb-2">Image du Ninja (noir & blanc, max 2Mo):</label>
+          
+          <!-- Afficher l'image actuelle si elle existe -->
+          @if($ninja->image)
+            <div class="mb-3">
+              <p class="text-sm text-gray-400 mb-2">Image actuelle:</p>
+              <img src="{{ asset('storage/' . $ninja->image) }}" 
+                   alt="{{ $ninja->name }}" 
+                   class="w-32 h-32 object-cover rounded-lg border border-gray-600">
+            </div>
+          @endif
+          
           <input type="file" id="image" name="image" accept="image/*"
                  class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent" />
+          <p class="text-xs text-gray-500 mt-1">Laissez vide pour conserver l'image actuelle</p>
         </div>
 
         <!-- histoire -->
@@ -79,7 +92,7 @@
             name="story"
             placeholder="Raconte ici l'histoire complète de ce ninja..."
             class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
-          >{{ old('story') }}</textarea>
+          >{{ old('story', $ninja->story) }}</textarea>
         </div>
 
         <!-- validation errors -->
@@ -94,17 +107,17 @@
         @endif
 
         <div class="flex justify-between items-center">
-          <a href="{{ route('ninjas.index') }}" 
+          <a href="{{ route('ninjas.show', $ninja) }}" 
              class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition">
             Annuler
           </a>
           
           <button type="submit" class="bg-red-700 text-white px-6 py-2 rounded hover:bg-red-800 transition shadow-lg">
-            Créer le Ninja
+            Modifier le Ninja
           </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-@endsection
+@endsection 
