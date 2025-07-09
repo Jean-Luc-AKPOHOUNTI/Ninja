@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DojoSeeder::class,
             NinjaSeeder::class,
+            LikeSeeder::class,
+            FavoriteSeeder::class,
         ]);
     }
 }

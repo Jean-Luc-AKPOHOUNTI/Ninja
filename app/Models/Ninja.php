@@ -43,4 +43,62 @@ class Ninja extends Model
         }
         return Auth::user()->hasLiked($this);
     }
+
+    /**
+     * Relation avec les favoris du ninja
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Vérifie si l'utilisateur connecté a mis ce ninja en favori
+     */
+    public function isFavoritedByUser()
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+        return Auth::user()->hasFavorited($this);
+    }
+
+    /**
+     * Relation avec les réactions du ninja
+     */
+    public function reactions()
+    {
+        return $this->hasMany(Reaction::class);
+    }
+
+    /**
+     * Réaction de l'utilisateur connecté
+     */
+    public function getUserReaction()
+    {
+        if (!Auth::check()) {
+            return null;
+        }
+        return $this->reactions()->where('user_id', Auth::id())->first();
+    }
+
+    /**
+     * Compteurs de réactions par type
+     */
+    public function getReactionCounts()
+    {
+        return $this->reactions()
+            ->selectRaw('type, count(*) as count')
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+    }
+
+    /**
+     * Relation avec les commentaires du ninja
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->with('user')->latest();
+    }
 }

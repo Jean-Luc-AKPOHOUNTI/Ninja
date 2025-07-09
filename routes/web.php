@@ -48,8 +48,21 @@ Route::get('/ninjas/{ninja}', [NinjaController::class, 'show'])->name('ninjas.sh
     // Routes pour les likes
 Route::post('/ninjas/{ninja}/like', [NinjaController::class, 'like'])->name('ninjas.like');
 Route::delete('/ninjas/{ninja}/like', [NinjaController::class, 'unlike'])->name('ninjas.unlike');
+    
+    // Routes pour les favoris
+Route::post('/ninjas/{ninja}/favorite', [App\Http\Controllers\FavoriteController::class, 'toggle'])->name('ninjas.favorite');
+Route::get('/favorites', [App\Http\Controllers\FavoriteController::class, 'index'])->name('ninjas.favorites');
+    
+    // Routes pour les réactions
+Route::post('/ninjas/{ninja}/reaction', [App\Http\Controllers\ReactionController::class, 'toggle'])->name('ninjas.reaction');
+    
+    // Routes pour les commentaires
+Route::post('/ninjas/{ninja}/comment', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
 
 });
+
+
 
 // Routes d'administration (protégées par auth + admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {

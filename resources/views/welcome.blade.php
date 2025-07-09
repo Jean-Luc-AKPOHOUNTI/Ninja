@@ -1,22 +1,17 @@
 @extends('components.layout')
 
 @section('content')
-<div class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+<div class="min-h-screen py-4 flex flex-col items-center justify-center relative overflow-hidden"
     style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('{{ asset('fondhome.jpg') }}') center center / cover no-repeat;">
-    
+
     <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
         <!-- Logo et titre -->
         <div class="mb-12">
-            <div class="flex justify-center mb-6">
-                <div class="p-4 bg-red-600 rounded-full shadow-2xl">
-                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
+            <div class="flex justify-center mb-8">
+                <div class="bg-gray-900/80 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-gray-700">
+                    <img src="{{ asset('logo.svg') }}" alt="Ninja Network" class="h-16 w-auto mx-auto">
                 </div>
             </div>
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-wide">
-                NINJA NETWORK
-            </h1>
             <p class="text-lg md:text-xl text-gray-300 mb-8">La plateforme ultime des guerriers de l'ombre</p>
         </div>
 
@@ -87,14 +82,14 @@
         @guest
             <div class="text-center">
                 <p class="text-gray-400 text-sm">
-                    Pas encore de compte ? 
+                    Pas encore de compte ?
                     <a href="{{ route('register') }}" class="text-red-400 hover:text-red-300 font-medium transition-colors">
                         Rejoignez l'ordre
                     </a>
                 </p>
             </div>
         @endguest
-        
+
         <!-- Fonctionnalités -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             <div class="text-center p-6 bg-gray-800/60 backdrop-blur-sm rounded-lg border border-gray-700">
@@ -108,7 +103,7 @@
                 <h3 class="text-white font-semibold mb-2">Communauté</h3>
                 <p class="text-gray-400 text-sm">Rejoignez une communauté de ninjas passionnés</p>
             </div>
-            
+
             <div class="text-center p-6 bg-gray-800/60 backdrop-blur-sm rounded-lg border border-gray-700">
                 <div class="flex justify-center mb-4">
                     <div class="p-3 bg-green-600 rounded-full">
@@ -120,7 +115,7 @@
                 <h3 class="text-white font-semibold mb-2">Dojos</h3>
                 <p class="text-gray-400 text-sm">Découvrez les dojos et leurs techniques secrètes</p>
             </div>
-            
+
             <div class="text-center p-6 bg-gray-800/60 backdrop-blur-sm rounded-lg border border-gray-700">
                 <div class="flex justify-center mb-4">
                     <div class="p-3 bg-red-600 rounded-full">

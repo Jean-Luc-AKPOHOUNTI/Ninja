@@ -78,4 +78,20 @@ class User extends Authenticatable
     {
         return $this->likes()->where('ninja_id', $ninja->id)->exists();
     }
+
+    /**
+     * Relation avec les favoris de l'utilisateur
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Vérifie si l'utilisateur a mis un ninja en favori
+     */
+    public function hasFavorited(Ninja $ninja): bool
+    {
+        return $this->favorites()->where('ninja_id', $ninja->id)->exists();
+    }
 }

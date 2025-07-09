@@ -50,18 +50,18 @@
           >{{ old('bio', $ninja->bio) }}</textarea>
         </div>
 
-        <!-- select a dojo -->
+        <!-- dojo name -->
         <div>
-          <label for="dojo_id" class="block text-sm font-medium text-gray-300 mb-2">Dojo:</label>
-          <select id="dojo_id" name="dojo_id" required
-                  class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent">
-            <option value="" disabled>Sélectionner un dojo</option>
-            @foreach($dojos as $dojo)
-              <option value="{{ $dojo->id }}" {{ $dojo->id == old('dojo_id', $ninja->dojo_id) ? 'selected' : '' }} >
-                {{ $dojo->name }} - {{ $dojo->location }}
-              </option>
-            @endforeach
-          </select>
+          <label for="dojo_name" class="block text-sm font-medium text-gray-300 mb-2">Nom du Dojo:</label>
+          <input 
+            type="text" 
+            id="dojo_name" 
+            name="dojo_name"
+            value="{{ old('dojo_name', $ninja->dojo->name) }}"
+            required
+            placeholder="Ex: Dojo du Dragon Rouge"
+            class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-red-700 focus:border-transparent"
+          >
         </div>
 
         <!-- image upload -->

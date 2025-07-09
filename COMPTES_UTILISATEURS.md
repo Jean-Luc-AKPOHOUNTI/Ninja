@@ -66,6 +66,9 @@
 ### Utilisateurs (User)
 - ✅ Voir la liste des ninjas
 - ✅ Voir les détails d'un ninja
+- ✅ Liker/Unliker des ninjas (❤️)
+- ✅ Ajouter/Retirer des favoris (⭐)
+- ✅ Voir ses ninjas favoris
 - ❌ Créer des ninjas
 - ❌ Supprimer des ninjas
 - ❌ Accéder au dashboard admin
@@ -76,6 +79,10 @@
 1. **Connexion** : Allez sur `/login` et utilisez un des comptes ci-dessus
 2. **Test Admin** : Connectez-vous avec `admin@ninja.com` / `admin123`
 3. **Test User** : Connectez-vous avec `hiroshi@ninja.com` / `password123`
+4. **Interactions** : 
+   - Likez des ninjas avec le cœur ❤️
+   - Ajoutez aux favoris avec l'étoile ⭐
+   - Consultez vos favoris sur `/favorites`
 
 ## 📝 Notes
 
