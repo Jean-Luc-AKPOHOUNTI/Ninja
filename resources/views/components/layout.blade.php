@@ -34,8 +34,9 @@
     <aside id="sidebar" class="w-64 bg-gray-950 border-r border-gray-800 flex flex-col fixed lg:relative h-full z-40 transform -translate-x-full lg:translate-x-0 transition-transform">
       <!-- Logo -->
       <div class="p-6 border-b border-gray-800">
-        <a href="{{ route('ninjas.index') }}" class="block hover:opacity-80 transition-opacity">
-          <img src="{{ asset('logo.svg') }}" alt="Ninja Network" class="h-12 w-auto">
+        <a href="{{ route('ninjas.index') }}" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+          <img src="{{ asset('images/logo.jpeg') }}" alt="Ninja Network" class="h-12 w-auto rounded-lg">
+          <span class="text-2xl font-bold text-yellow-400">Warrior</span>
         </a>
       </div>
 
@@ -45,9 +46,17 @@
           <a href="{{ route('ninjas.index') }}" 
              class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 515.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
             <span>Ninjas</span>
+          </a>
+          
+          <a href="{{ route('chat.index') }}" 
+             class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <span>Chat Room</span>
           </a>
           
           <a href="{{ route('ninjas.favorites') }}" 
@@ -160,11 +169,8 @@
         <div class="max-w-6xl mx-auto">
           <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div class="flex items-center space-x-2">
-              <div class="w-6 h-6 bg-red-600 rounded flex items-center justify-center">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-              </div>
+              <img src="{{ asset('images/logo.jpeg') }}" alt="Ninja Network" class="w-6 h-6 rounded object-cover">
+              <span class="text-yellow-400 font-semibold text-sm">Warrior</span>
               <span class="text-gray-400 text-sm">© 2024 Ninja Network. Tous droits réservés.</span>
             </div>
             

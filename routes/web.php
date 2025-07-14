@@ -60,6 +60,17 @@ Route::post('/ninjas/{ninja}/reaction', [App\Http\Controllers\ReactionController
 Route::post('/ninjas/{ninja}/comment', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
 
+    // Routes pour le chat
+    Route::get('/chat', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/messages', [\App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
+    
+    // Routes admin pour le chat
+    Route::middleware('admin')->group(function () {
+        Route::delete('/chat/messages/{message}', [\App\Http\Controllers\ChatController::class, 'destroy'])->name('chat.destroy');
+        Route::post('/chat/kick/{user}', [\App\Http\Controllers\ChatController::class, 'kickUser'])->name('chat.kick');
+    });
+
 });
 
 
