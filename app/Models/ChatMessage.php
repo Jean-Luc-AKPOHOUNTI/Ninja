@@ -13,6 +13,10 @@ class ChatMessage extends Model
     protected $fillable = [
         'user_id',
         'message',
+        'file_path',
+        'file_name',
+        'file_type',
+        'file_size',
         'is_deleted',
         'deleted_at',
         'deleted_by'

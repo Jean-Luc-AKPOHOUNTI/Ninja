@@ -175,6 +175,16 @@
                             
                             <div class="text-gray-300 text-sm leading-relaxed">
                                 {{ $message->message }}
+                                @if($message->file_path)
+                                    <div class="mt-2">
+                                        <a href="{{ asset('storage/' . $message->file_path) }}" target="_blank" class="inline-flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-lg transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                                            </svg>
+                                            <span>{{ $message->file_name }}</span>
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -193,10 +203,10 @@
                 </div>
             </div>
             
-            <form id="chat-form" class="flex items-center space-x-3">
+            <form id="chat-form" class="flex items-center space-x-3" enctype="multipart/form-data">
                 @csrf
                 <!-- Attachment button -->
-                <input type="file" id="file-input" class="hidden" accept="image/*,video/*,audio/*,.pdf,.doc,.docx">
+                <input type="file" id="file-input" name="file" class="hidden" accept="image/*,video/*,audio/*,.pdf,.doc,.docx">
                 <button type="button" onclick="document.getElementById('file-input').click()" class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center transition-colors">
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
@@ -280,25 +290,27 @@ messageInput.addEventListener('input', () => {
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const message = messageInput.value.trim();
+    const fileInput = document.getElementById('file-input');
     
-    // Vérifie que le message n'est pas vide
-    if (!message) return;
+    // Vérifie qu'il y a un message ou un fichier
+    if (!message && !fileInput.files[0]) return;
 
     try {
-        // Prépare les données du formulaire
         const formData = new FormData(chatForm);
+        if (fileInput.files[0]) {
+            formData.append('file', fileInput.files[0]);
+        }
         
-        // Envoie la requête POST au serveur
         const response = await fetch('{{ route("chat.store") }}', {
             method: 'POST',
             body: formData
         });
 
-        // Si l'envoi réussit
         if (response.ok) {
-            messageInput.value = ''; // Vide le champ de saisie
-            document.getElementById('typing-indicator').classList.add('hidden'); // Cache l'indicateur
-            loadMessages(); // Recharge les messages
+            messageInput.value = '';
+            fileInput.value = '';
+            document.getElementById('typing-indicator').classList.add('hidden');
+            loadMessages();
         }
     } catch (error) {
         console.error('Erreur lors de l\'envoi du message:', error);
@@ -383,7 +395,10 @@ function createMessageElement(message) {
                     <span class="text-gray-500 text-xs">${new Date(message.created_at).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</span>
                     ${adminControls}
                 </div>
-                <div class="text-gray-300 text-sm leading-relaxed">${message.message}</div>
+                <div class="text-gray-300 text-sm leading-relaxed">
+                    ${message.message}
+                    ${message.file_path ? `<div class="mt-2"><a href="/storage/${message.file_path}" target="_blank" class="inline-flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded-lg transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg><span>${message.file_name}</span></a></div>` : ''}
+                </div>
             </div>
         </div>
     `;
@@ -485,6 +500,21 @@ document.addEventListener('click', (e) => {
     // Si le clic n'est ni sur le picker ni sur le bouton émoji
     if (!picker.contains(e.target) && !emojiBtn) {
         picker.classList.add('hidden');
+    }
+});
+
+// ===== GESTION DES FICHIERS =====
+
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const button = document.querySelector('button[onclick="document.getElementById(\'file-input\').click()"]');
+    
+    if (file) {
+        button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        button.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+    } else {
+        button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        button.classList.add('bg-gray-800', 'hover:bg-gray-700');
     }
 });
 

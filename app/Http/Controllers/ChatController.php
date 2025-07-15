@@ -23,13 +23,27 @@ class ChatController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'message' => 'required|string|max:500'
+            'message' => 'nullable|string|max:500',
+            'file' => 'nullable|file|max:10240|mimes:jpg,jpeg,png,gif,pdf,doc,docx,mp4,mp3'
         ]);
 
-        ChatMessage::create([
+        $data = [
             'user_id' => Auth::id(),
-            'message' => $request->message
-        ]);
+            'message' => $request->message ?? ''
+        ];
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('chat-files', $filename, 'public');
+            
+            $data['file_path'] = $path;
+            $data['file_name'] = $file->getClientOriginalName();
+            $data['file_type'] = $file->getClientMimeType();
+            $data['file_size'] = $file->getSize();
+        }
+
+        ChatMessage::create($data);
 
         return response()->json(['status' => 'success']);
     }
