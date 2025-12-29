@@ -173,34 +173,6 @@
       </div>
     </div>
 
-    <!-- Technologies -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-8 mb-8">
-      <div class="flex items-center space-x-3 mb-6">
-        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-        </svg>
-        <h2 class="text-2xl font-bold text-white">Technologies utilisées</h2>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="text-center p-4 bg-gray-700 rounded-lg">
-          <div class="text-red-500 font-bold text-lg mb-1">Laravel</div>
-          <div class="text-gray-400 text-sm">Framework PHP</div>
-        </div>
-        <div class="text-center p-4 bg-gray-700 rounded-lg">
-          <div class="text-blue-500 font-bold text-lg mb-1">Tailwind CSS</div>
-          <div class="text-gray-400 text-sm">Framework CSS</div>
-        </div>
-        <div class="text-center p-4 bg-gray-700 rounded-lg">
-          <div class="text-green-500 font-bold text-lg mb-1">MySQL</div>
-          <div class="text-gray-400 text-sm">Base de données</div>
-        </div>
-        <div class="text-center p-4 bg-gray-700 rounded-lg">
-          <div class="text-yellow-500 font-bold text-lg mb-1">Blade</div>
-          <div class="text-gray-400 text-sm">Moteur de templates</div>
-        </div>
-      </div>
-    </div>
-
     <!-- Contact -->
     <div class="text-center">
       <div class="flex items-center justify-center space-x-3 mb-4">
